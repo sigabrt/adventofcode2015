@@ -30,19 +30,50 @@ unittest {
   assert(getWrappingPaperAreaForBoxSize(1, 1, 10) == 43);
 }
 
+/// Calculates the length, in feet, of ribbon required for
+/// Santa's elves to adorn a box of the specified size.
+///
+/// Params:
+///   l = length of the box, in feet
+///   w = width of the box, in feet
+///   h = height of the box, in feet
+uint getRibbonLengthForBoxSize(uint l, uint w, uint h) {
+  uint perim1 = 2*l + 2*w;
+  uint perim2 = 2*w + 2*h;
+  uint perim3 = 2*l + 2*h;
+
+  return min(perim1, perim2, perim3) + (l * w * h);
+}
+
+unittest {
+  assert(getRibbonLengthForBoxSize(0, 0, 0) == 0);
+  assert(getRibbonLengthForBoxSize(2, 3, 4) == 34);
+  assert(getRibbonLengthForBoxSize(1, 1, 10) == 14);
+}
+
 int main(string[] args) {
   File input = stdin;
 
+  // Read from a file instead of stdin if one is given
   if (args.length > 1) {
     input = File(args[1]);
   }
 
-  uint area = input.byLine()
-       .map!(line => line.split('x'))                // Input is of the format AxBxC, split the three dimensions.
-       .map!(strdims => to!(uint[])(strdims))        // Convert the resulting array of strings to an array of integers.
-       .map!(dims => getWrappingPaperAreaForBoxSize( // Get the amount of wrapping paper required for the specified
-                         dims[0], dims[1], dims[2])) // box size.
-       .sum();                                       // Add all the results together.
-  writeln(area, " square feet");
+  uint wrappingPaperArea = 0;
+  uint ribbonLength = 0;
+
+  foreach (line; input.byLine()) {
+    // Input lines will be of the format WxLxH
+    uint[] dimensions = to!(uint[])(line.split('x'));
+    
+    wrappingPaperArea += getWrappingPaperAreaForBoxSize(
+        dimensions[0], dimensions[1], dimensions[2]);
+    ribbonLength += getRibbonLengthForBoxSize(
+        dimensions[0], dimensions[1], dimensions[2]);
+  }
+
+  writeln(wrappingPaperArea, " square feet of wrapping paper");
+  writeln(ribbonLength, " feet of ribbon");
+
   return 0;
 }
