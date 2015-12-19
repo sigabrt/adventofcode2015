@@ -10,24 +10,34 @@ int main(string[] args) {
   }
 
   uint[int[2]] deliveredPresents;
-  int[2] currentHouse = [0, 0];
+  int[2] santaPos = [0, 0];
+  int[2] roboSantaPos = [0, 0];
 
   // The first house gets a present too
-  deliveredPresents[currentHouse] += 1;
+  deliveredPresents[santaPos] += 1;
 
+  int i = 0;
   foreach (ubyte[] chunk; input.byChunk(1)) {
     char c = to!char(chunk[0]);
-    
-    if (c == '<') {
-      currentHouse[0] -= 1;
-    } else if (c == '>') {
-      currentHouse[0] += 1;
-    } else if (c == '^') {
-      currentHouse[1] += 1;
-    } else if (c == 'v') {
-      currentHouse[1] -= 1;
+
+    int[] pos;
+    if (i%2 == 0) { // Santa moves on even inputs
+      pos = santaPos;
+    } else {        // Robo santa moves on odd inputs
+      pos = roboSantaPos;
     }
-    deliveredPresents[currentHouse] += 1;
+
+    if (c == '<') {
+      pos[0] -= 1;
+    } else if (c == '>') {
+      pos[0] += 1;
+    } else if (c == '^') {
+      pos[1] += 1;
+    } else if (c == 'v') {
+      pos[1] -= 1;
+    }
+    deliveredPresents[to!(int[2])(pos)] += 1;
+    i += 1;
   }
 
   writeln(deliveredPresents.length, " house(s) got at least one present");
