@@ -11,7 +11,7 @@ const auto GRID_SIDE = 1000;
 // Regular expression to help chop up command strings
 auto CMD_REGEX = ctRegex!(`((?:[A-Za-z]+\s*)+) (\d+,\d+) ((?:[A-Za-z]+\s*)+) (\d+,\d+)`);
 
-void apply(bool[] lights, string cmdStr) {
+void apply(int[] lights, string cmdStr) {
   auto cmdParts = matchFirst(cmdStr, CMD_REGEX);
   assert(!cmdParts.empty);
 
@@ -29,15 +29,18 @@ void apply(bool[] lights, string cmdStr) {
     for (int col = rangeStart[1]; col <= rangeEnd[1]; col++) {
       switch (cmd) {
         case "turn on":
-          lights[row*GRID_SIDE+col] = true;
+          lights[row*GRID_SIDE+col] += 1;
           break;
 
         case "turn off":
-          lights[row*GRID_SIDE+col] = false;
+          lights[row*GRID_SIDE+col] -= 1;
+          if (lights[row*GRID_SIDE+col] < 0) {
+            lights[row*GRID_SIDE+col] = 0;
+          }
           break;
 
         case "toggle":
-          lights[row*GRID_SIDE+col] = !lights[row*GRID_SIDE+col];
+          lights[row*GRID_SIDE+col] += 2;
           break;
 
         default:
@@ -55,15 +58,15 @@ int main(string[] args) {
     input = File(args[1]);
   }
 
-  bool lights[GRID_SIDE * GRID_SIDE];
+  int lights[GRID_SIDE * GRID_SIDE];
   foreach (line; input.byLine()) {
     apply(lights, to!string(line));
   }
 
   // The slice feels kinda dirty, but apparently static arrays
   // are not ranges and so can't be passed to map().
-  auto numLightsOn = lights[0..$].map!(b => b ? 1 : 0).sum();
-  writeln(numLightsOn, " were turned on");
+  auto brightness = lights[0..$].sum();
+  writeln("Total brightness: ", brightness);
 
   return 0;
 }
