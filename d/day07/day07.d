@@ -414,6 +414,17 @@ int main(string[] args) {
     nodeFromInstruction(to!string(line), graphCache);
   }
 
-  writeln(findValue(graphCache["a"], evalCache));
+  ushort a = findValue(graphCache["a"], evalCache);
+  writeln("value of a: ", a);
+
+  writeln("changing value of b to ", a);
+  nodeFromInstruction(to!string(a) ~ " -> b", graphCache);
+
+  // Clear the cache so everything will be reevaluated
+  evalCache = null;
+
+  a = findValue(graphCache["a"], evalCache);
+  writeln("new value of a: ", a);
+
   return 0;
 }
