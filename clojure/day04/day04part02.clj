@@ -3,10 +3,13 @@
 
 (require 'digest)
 
+(defn md5-with-postfix
+  [key val]
+  (digest/md5 (str key val)))
+
 (println
   (let [key (second *command-line-args*)]
-    (loop [val 1]
-      (let [hash (digest/md5 (str key val))]
-        (if (.startsWith hash "000000")
-          val
-          (recur (inc val)))))))
+    (first
+      (filter
+        #(.startsWith (md5-with-postfix key %1) "000000")
+        (range)))))
