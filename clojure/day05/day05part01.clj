@@ -7,13 +7,9 @@
 
 (defn repeating-letters?
   [word repeat]
-  (>=
-    (count
-      (filter
-        (fn [substr]
-          (= (count (distinct substr)) 1))
-        (partition repeat 1 word)))
-    1))
+  (some
+    #(apply = %)
+    (partition repeat 1 word)))
 
 (defn clean?
   [word]
@@ -21,7 +17,9 @@
 
 (defn nice?
   [word]
-  (and (has-vowels? word 2) (repeating-letters? word 2) (clean? word)))
+  (and (has-vowels? word 3)
+       (repeating-letters? word 2)
+       (clean? word)))
 
 (println
   (count
