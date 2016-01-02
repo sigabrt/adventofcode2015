@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [advent.day01 :refer :all]))
 
-(deftest basic-move-tests
+(deftest basic-moves
   (testing "Move values"
     (is (= 1  (move-offset \()))
     (is (= -1 (move-offset \)))))
