@@ -25,7 +25,7 @@
       (fn [line]
         (let [dims (map read-string (str/split line #"x"))]
           (wrapping-paper-area dims)))
-      (line-seq (java.io.BufferedReader. (io/reader (io/resource "day02.txt")))))))
+      (line-seq (io/reader (io/resource "day02.txt"))))))
 
 (defn part2
   []
@@ -34,4 +34,4 @@
       (fn [line]
         (let [dims (map read-string (str/split line #"x"))]
           (wribbon-length dims)))
-      (line-seq (java.io.BufferedReader. (io/reader (io/file (io/resource "day02.txt"))))))))
+      (line-seq (io/reader (io/file (io/resource "day02.txt")))))))
