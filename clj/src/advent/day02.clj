@@ -10,7 +10,7 @@
         s3 (* w h)]
     (+ (* s1 2) (* s2 2) (* s3 2) (min s1 s2 s3))))
 
-(defn wribbon-length
+(defn ribbon-length
   "Calculates the minimum amount of ribbon required to decorate the given box."
   [[l w h]]
   (let [p1 (+ (* l 2) (* w 2))
@@ -33,5 +33,5 @@
     (map
       (fn [line]
         (let [dims (map read-string (str/split line #"x"))]
-          (wribbon-length dims)))
+          (ribbon-length dims)))
       (line-seq (io/reader (io/file (io/resource "day02.txt")))))))
