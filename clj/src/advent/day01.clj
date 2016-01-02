@@ -1,32 +1,24 @@
 (ns advent.day01
   (:require [clojure.java.io :as io]))
 
+(defn move-offset
+  [c]
+  (case c
+        \( 1
+        \) -1
+        0))
+
+(defn calc-move-result
+  [moves]
+  (reduce + (map move-offset moves)))
+
 (defn part1
   []
-  (reduce
-    (fn [total c]
-      (if (= c \()
-        (+ total 1)
-        (if (= c \))
-          (- total 1)
-          total)))
-    0
-    (slurp (io/resource "day01.txt"))))
+  (calc-move-result (slurp (io/resource "day01.txt"))))
 
 (defn part2
   []
   (+ 1
-    (first
-      (reduce
-        (fn [[index floor] next]
-          (if (= floor -1)
-            [index floor]
-            (let [i (first next)
-                  c (second next)]
-              (if (= c \()
-                [i (+ floor 1)]
-                (if (= c \))
-                  [i (- floor 1)]
-                  [index floor])))))
-        [0 0]
-        (map-indexed vector (slurp (io/resource "day01.txt")))))))
+    (.indexOf
+      (reductions + (map move-offset (slurp (io/resource "day01.txt"))))
+      -1)))
