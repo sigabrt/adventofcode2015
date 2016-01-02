@@ -1,1 +1,1 @@
-input/day01.txt
+../../input/day01.txt
