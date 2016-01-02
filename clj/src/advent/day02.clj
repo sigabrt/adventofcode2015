@@ -34,4 +34,4 @@
       (fn [line]
         (let [dims (map read-string (str/split line #"x"))]
           (ribbon-length dims)))
-      (line-seq (io/reader (io/file (io/resource "day02.txt")))))))
+      (line-seq (io/reader (io/resource "day02.txt"))))))
