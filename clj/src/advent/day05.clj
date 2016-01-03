@@ -1,3 +1,6 @@
+(ns advent.day05
+  (:require [clojure.java.io :as io]))
+
 (def vowel? (set "aeiou"))
 (def bad-words #{"ab" "cd" "pq" "xy"})
 
@@ -21,8 +24,9 @@
        (repeating-letters? word 2)
        (clean? word)))
 
-(println
+(defn part1
+  []
   (count
     (filter
       nice?
-      (line-seq (java.io.BufferedReader. *in*)))))
+      (line-seq (io/reader (io/resource "day05.txt"))))))
